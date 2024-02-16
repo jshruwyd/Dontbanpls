@@ -1,4 +1,4 @@
-name: Openbox
+Trịname: Openbox
  
 on: 
   workflow_dispatch:
@@ -10,7 +10,8 @@ jobs:
         run: |
              sudo apt update -y
              sudo apt install qemu-kvm cpulimit wget -y
-             sudo apt install openbox firefox tigervnc-standalone-server-y
+             sudo apt install openbox firefox -y
+             sudo apt install tigervnc-standalone-server -y
              curl -fsSL https://tailscale.com/install.sh | sh
              sudo tailscale up
              sudo apt install openbox qemu-kvm firefox
