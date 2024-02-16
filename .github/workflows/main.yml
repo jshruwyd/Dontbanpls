@@ -1,4 +1,4 @@
-Trịname: Openbox
+name: Openbox
  
 on: 
   workflow_dispatch:
