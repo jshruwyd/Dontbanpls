@@ -17,5 +17,5 @@ jobs:
              sudo apt install openbox qemu-kvm firefox
       - name: connect 
         run: |
-             sudo vncserver  -SecurityType none -xstartup "openbox" -rfbport 6080
+             sudo vncserver -SecurityType none -xstartup "openbox" -rfbport 6080
              tailscale ip -4
