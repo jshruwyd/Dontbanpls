@@ -1,0 +1,20 @@
+name: Openbox
+ 
+on: 
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: chuẩn bị phần mềm
+        run: |
+             sudo apt update -y
+             sudo apt install qemu-kvm cpulimit wget -y
+             sudo apt install openbox firefox tigervnc-standalone-server-y
+             curl -fsSL https://tailscale.com/install.sh | sh
+             sudo tailscale up
+             sudo apt install openbox qemu-kvm firefox
+      - name: connect 
+        run: |
+             sudo vncserver  -SecurityType none -xstartup "openbox" -rfbport 6080
+             tailscale ip -4
