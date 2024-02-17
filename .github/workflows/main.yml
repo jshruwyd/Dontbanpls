@@ -14,7 +14,6 @@ jobs:
              sudo apt install tigervnc-standalone-server -y
              curl -fsSL https://tailscale.com/install.sh | sh
              sudo tailscale up
-             sudo apt install Firefox
              sudo vncserver -SecurityType none -xstartup "openbox" -rfbport 6080
       - name: connect 
         run: |
