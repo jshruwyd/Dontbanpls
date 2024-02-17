@@ -9,8 +9,8 @@ jobs:
       - name: chuẩn bị phần mềm
         run: |
              sudo apt update -y
-             sudo apt install qemu-kvm cpulimit wget -y
-             sudo apt install openbox firefox -y
+            
+             sudo apt install openbox -y
              sudo apt install tigervnc-standalone-server -y
              curl -fsSL https://tailscale.com/install.sh | sh
              sudo tailscale up
