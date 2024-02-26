@@ -10,12 +10,13 @@ jobs:
         run: |
              sudo apt update -y
             
-             sudo apt install openbox -y
+             sudo apt install  wget openbox -y
              sudo apt install tigervnc-standalone-server -y
-             curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
-            | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
-            | sudo tee /etc/apt/sources.list.d/ngrok.list && sudo apt update && sudo apt install ngrok
-             sudo vncserver -SecurityType none -xstartup "openbox" -rfbport 6080
+             wget -O a.tgz "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz"
+             tar -xf a.tgz
+             ./ngrok config add-authtoken 2c2RasXq8hstGK45AJLZNn8jCep_25o2TcwdU4aZKAXhxgJKQ
+             ./ngrok tcp 5901
+             sudo vncserver -SecurityType none 
              ngrok config add-authtoken 2c2RasXq8hstGK45AJLZNn8jCep_25o2TcwdU4aZKAXhxgJKQ
       
              
