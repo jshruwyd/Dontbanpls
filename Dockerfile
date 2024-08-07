@@ -9,11 +9,8 @@ COPY . /app
 
 # Install required tools
 RUN apt-get update -y && \
-    apt-get install -y wget curl && \
+    apt-get install -y wget tmate curl && \
         curl -fsSL https://code-server.dev/install.sh | sh
 
-        # Set environment variable for the port
-        ENV PORT=10000
-
-        # Start VSCode
-        CMD code-server --port $PORT --disable-telemetry --auth none
+# Tmate
+RUN tmate
