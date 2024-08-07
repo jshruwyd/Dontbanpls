@@ -5,10 +5,6 @@ FROM ubuntu:latest
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
-    wget \
-
-# Set the working directory
-WORKDIR /app
 
 # Install JupyterLab
 RUN tmate
