@@ -10,7 +10,7 @@ COPY . /app
 # Install required tools
 RUN apt-get update -y && \
     apt-get install -y unzip wget docker.io tmate curl && \
-        curl -fsSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz | sh
+        curl -fsSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
 
 # Unzip
 RUN unzip ngrok"
