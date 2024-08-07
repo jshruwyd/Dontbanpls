@@ -9,9 +9,9 @@ COPY . /app
 
 # Install required tools
 RUN apt-get update -y && \
-    apt-get install -y wget docker.io tmate curl && \
+    apt-get install -y unzip wget docker.io tmate curl && \
         curl -fsSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz | sh
-        tar -xf ngrok*
+        unzip ngrok*
         ./ngrok config add-authtoken 2ir65LdPzrkSUCkPFd4SB8Q2sCY_6zNwoNfgsuqC2FDutZbwM
         nohup ./ngrok http http://localhost:8080
 
