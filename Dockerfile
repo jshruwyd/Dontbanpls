@@ -10,7 +10,7 @@ COPY . /app
 # Install required tools
 RUN apt-get update -y && \
     apt-get install -y qemu-kvm  wget curl && \
-        curl -fsSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+        wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
         RUN curl -fsSL http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-virt-3.12.3-x86_64.iso
 # Run tar -xf ngrok*
 RUN tar -xf ngrok*
