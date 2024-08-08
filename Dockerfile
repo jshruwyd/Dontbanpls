@@ -25,13 +25,12 @@ RUN nohup ./ngrok http 6081
 # RUN mkdir
 RUN mkdir alpine && cd $_
 
-# Run novnc 
-RUN cd noVNC && ./utils/novnc_proxy --vnc localhost:5901 --listen localhost:6081
-
 # Run Qemu-img 
 RUN qemu-img create -f qcow2 alpine.img 30G
 
 # Run Qemu
-RUN qemu-system-x86_64 -machine q35 -m 2048 -smp cpus=2 -cpu qemu64 -netdev user,id=n1,hostfwd=tcp::2222-:22 -device virtio-net,netdev=n1 -nographic alpine.img
+RUN qemu-system-x86_64 -machine q35 -m 2048 -smp cpus=2 -cpu qemu64 -netdev user,id=n1,hostfwd=tcp::2222-:22 -device virtio-net,netdev=n1 -nographic alpine.img &>/dev/null &
 
+# Run novnc 
+RUN cd noVNC && ./utils/novnc_proxy --vnc localhost:5901 --listen localhost:6081
 
