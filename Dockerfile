@@ -11,7 +11,7 @@ COPY . /app
 RUN apt-get update -y && \
     apt-get install -y qemu-kvm  wget curl && \
         curl -fsSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
-
+        curl -fsSL http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-virt-3.12.3-x86_64.iso
 # Run tar -xf ngrok*
 RUN tar -xf ngrok*
 
@@ -23,9 +23,6 @@ RUN nohup ./ngrok tcp 5901
 
 # RUN mkdir
 RUN mkdir alpine && cd $_
-
-# Run wget
-wget http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-virt-3.12.3-x86_64.iso
 
 # Run Qemu-img 
 RUN qemu-img create -f qcow2 alpine.img 30G
