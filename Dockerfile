@@ -24,8 +24,8 @@ RUN nohup ./ngrok tcp 5901
 # RUN mkdir
 RUN mkdir alpine && cd $_
 
-# Run curl
-curl -fsSL http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-virt-3.12.3-x86_64.iso
+# Run wget
+wget http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-virt-3.12.3-x86_64.iso
 
 # Run Qemu-img 
 RUN qemu-img create -f qcow2 alpine.img 30G
