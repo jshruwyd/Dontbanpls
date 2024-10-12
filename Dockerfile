@@ -1,11 +1,12 @@
-# Use the base image
-FROM fredblgr/ubuntu-novnc:20.04
- 
-# Expose the port on which NoVNC runs (80 inside the container)
-EXPOSE 80
- 
-# Set the environment variable for screen resolution
-ENV RESOLUTION 1707x1067
- 
-# Start the command to run NoVNC
-CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+FROM ubuntu:22.04
+
+RUN apt-get update && \
+    apt-get install -y tmate sudo wget neofetch docker.io docker-compose openssh-server openssh-client && \
+    sudo sed -i 's/^#\?\s*PermitRootLogin\s\+.*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    echo 'root:root' | chpasswd && \
+    printf '#!/bin/sh\nexit 0' > /usr/sbin/policy-rc.d && \
+    apt-get install -y systemd systemd-sysv dbus dbus-user-session && \
+    printf "systemctl start systemd-logind" >> /etc/profile
+
+CMD ["bash"]
+ENTRYPOINT ["/sbin/init"]
