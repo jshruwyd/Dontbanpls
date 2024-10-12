@@ -7,6 +7,5 @@ RUN apt-get update && \
     printf '#!/bin/sh\nexit 0' > /usr/sbin/policy-rc.d && \
     apt-get install -y systemd systemd-sysv dbus dbus-user-session && \
     printf "systemctl start systemd-logind" >> /etc/profile
-    echo 'PS1="\[\033[0;32m\]root\[\033[0m\]@\[\033[0;34m\]dockercontainer\[\033[0m\]:\w\$ "' >> /root/.bashrc
 CMD ["bash"]
 ENTRYPOINT ["/sbin/init"]
