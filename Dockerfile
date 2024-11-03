@@ -7,8 +7,6 @@ RUN apt-get update && \
     printf '#!/bin/sh\nexit 0' > /usr/sbin/policy-rc.d && \
     apt-get install -y systemd systemd-sysv dbus dbus-user-session && \
     printf "systemctl start systemd-logind" >> /etc/profile
-# del /tmp
-rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 # Expose the web-based terminal port
 EXPOSE 4200
 CMD ["/usr/bin/shellinaboxd", "-t", "-s", "/:LOGIN"]
