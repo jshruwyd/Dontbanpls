@@ -1,14 +1,15 @@
 FROM ubuntu:22.04
-
+ #cai dat mot so app
 RUN apt-get update && \
-    apt-get install -y tmate sudo wget neofetch docker.io docker-compose openssh-server openssh-client && \
+    apt-get install -y shellinabox tmate sudo wget neofetch docker.io docker-compose openssh-server openssh-client && \
     sudo sed -i 's/^#\?\s*PermitRootLogin\s\+.*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     echo 'root:root' | chpasswd && \
     printf '#!/bin/sh\nexit 0' > /usr/sbin/policy-rc.d && \
     apt-get install -y systemd systemd-sysv dbus dbus-user-session && \
     printf "systemctl start systemd-logind" >> /etc/profile
-# Thêm cấu hình màu cho prompt vào file .bashrc
-RUN echo 'PS1="\[\033[0;32m\]root\[\033[0m\]@\[\033[0;34m\]dockercontainer\[\033[0m\]:\w\$ "' >> /root/.bashrc
-
-CMD ["bash"]
+# del /tmp
+rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# Expose the web-based terminal port
+EXPOSE 4200
+CMD ["/usr/bin/shellinaboxd", "-t", "-s", "/:LOGIN"]
 ENTRYPOINT ["/sbin/init"]
