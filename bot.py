@@ -106,4 +106,4 @@ async def on_ready():
     logging.info(f'Bot da dang nhap thanh cong voi tai khoan: {client.user}')
 
 # Chay bot
-client.run('MTI5ODUwMzM1NzMyOTA0NzYzNg.G6lfNx.PGl9xgNLTLtcrui8-j8Yfx8DZs3atBimge8_Yo')
+client.run('MTI5ODUwMzM1NzMyOTA0NzYzNg.GjdZqO.rqoPiLhs_NrZZhpVDBmMIHT7fR9rIdtQxmSP00')
