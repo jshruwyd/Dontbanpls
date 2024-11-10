@@ -14,8 +14,8 @@ intents.message_content = True
 intents.typing = False
 intents.presences = False
 
-# Dùng discord.Bot thay vì discord.Client
-client = discord.Bot(intents=intents)
+# Sử dụng commands.Bot thay vì discord.Bot
+client = commands.Bot(command_prefix="!", intents=intents)
 
 # Luu tru thong tin nguoi dung va ket noi SSH
 user_authenticated = {}  # Luu tru trang thai xac thuc cua nguoi dung
@@ -103,7 +103,6 @@ async def run(ctx, command: str):
 # Lang nghe su kien khi bot da san sang
 @client.event
 async def on_ready():
-    await client.tree.sync()
     logging.info(f'Bot da dang nhap thanh cong voi tai khoan: {client.user}')
 
 # Chay bot
