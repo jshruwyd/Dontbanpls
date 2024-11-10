@@ -1,0 +1,108 @@
+import discord
+from discord.ext import commands
+import subprocess
+import asyncio
+import logging
+import os
+
+# Cau hinh logging de theo doi cac hoat dong
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+
+# Tao bot voi intents
+intents = discord.Intents.default()
+intents.message_content = True
+intents.typing = False
+intents.presences = False
+client = discord.Client(intents=intents)
+
+# Luu tru thong tin nguoi dung va ket noi SSH
+user_authenticated = {}  # Luu tru trang thai xac thuc cua nguoi dung
+user_connections = {}    # Luu tru ket noi SSH cua nguoi dung
+
+# Mat khau dang nhap cho bot
+PASSWORD = "huy"
+
+# Kiem tra nguoi dung da xac thuc chua
+def is_authenticated(user_id):
+    return user_authenticated.get(user_id, False)
+
+# Ham ket noi SSH va chay lenh lien tuc
+async def run_command_streaming(ssh_host: str, password: str, port: str, command: str, channel):
+    """Chay lenh trong SSH va gui ket qua theo dong (streaming)"""
+    ssh_command = f"sshpass -p {password} ssh -p {port} {ssh_host} '{command}'"
+    
+    # Tao subprocess de chay lenh
+    process = subprocess.Popen(ssh_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    # Doc output cua lenh va gui tung dong vao Discord
+    while True:
+        output = process.stdout.readline()
+        if output == '' and process.poll() is not None:
+            break
+        if output:
+            await channel.send(output.strip())
+    
+    # Kiem tra loi tu stderr
+    error = process.stderr.read()
+    if error:
+        await channel.send(f"Loi: {error.strip()}")
+
+# Lenh /login de yeu cau nguoi dung nhap mat khau
+@client.tree.command(name="login", description="Dang nhap bang mat khau")
+async def login(interaction: discord.Interaction, password: str):
+    """Lenh de nguoi dung dang nhap bang mat khau"""
+    if password == PASSWORD:
+        user_authenticated[interaction.user.id] = True
+        await interaction.response.send_message("Ban da dang nhap thanh cong! Hay ket noi voi SSH va chay lenh.", ephemeral=True)
+    else:
+        await interaction.response.send_message("Mat khau sai. Vui long thu lai.", ephemeral=True)
+
+# Lenh /connect de ket noi SSH
+@client.tree.command(name="connect", description="Ket noi SSH")
+async def connect(interaction: discord.Interaction, ssh_host: str, password: str, port: str):
+    """Ket noi vao may chu SSH va xac thuc ket noi"""
+    if not is_authenticated(interaction.user.id):
+        await interaction.response.send_message("Ban chua dang nhap. Vui long su dung lenh `/login <mat khau>` truoc.", ephemeral=True)
+        return
+
+    # Luu ket noi SSH
+    user_connections[interaction.user.id] = {"ssh_host": ssh_host, "password": password, "port": port}
+    await interaction.response.send_message(f"Da ket noi den {ssh_host} qua cong {port}.", ephemeral=True)
+
+# Lenh /tmate de ket noi tmate session
+@client.tree.command(name="tmate", description="Ket noi den phien tmate")
+async def tmate(interaction: discord.Interaction, tmate_session: str, password: str):
+    """Ket noi vao phien tmate voi session ID"""
+    if not is_authenticated(interaction.user.id):
+        await interaction.response.send_message("Ban chua dang nhap. Vui long su dung lenh `/login <mat khau>` truoc.", ephemeral=True)
+        return
+
+    # Luu thong tin tmate
+    user_connections[interaction.user.id] = {"ssh_host": tmate_session, "password": password, "port": "22"}  # Mac dinh port tmate la 22
+    await interaction.response.send_message(f"Da ket noi toi phien tmate {tmate_session}. Ban co the chay lenh bang /run.", ephemeral=True)
+
+# Lenh /run de chay lenh trong SSH hoac tmate
+@client.tree.command(name="run", description="Chay lenh trong SSH hoac tmate")
+async def run(interaction: discord.Interaction, command: str):
+    """Chay lenh trong SSH da ket noi hoac tmate"""
+    if not is_authenticated(interaction.user.id):
+        await interaction.response.send_message("Ban chua dang nhap. Vui long su dung lenh `/login <mat khau>` truoc.", ephemeral=True)
+        return
+
+    connection = user_connections.get(interaction.user.id)
+    if not connection:
+        await interaction.response.send_message("Ban chua ket noi toi SSH hoac tmate. Hay su dung lenh `/connect <ssh_host> <mat khau> <port>` hoac `/tmate <session_id> <mat khau>` de ket noi.", ephemeral=True)
+        return
+
+    # Gui lenh va nhan ket qua theo dong (streaming)
+    await interaction.response.send_message(f"Dang chay lenh: `{command}`", ephemeral=True)
+    await run_command_streaming(connection["ssh_host"], connection["password"], connection["port"], command, interaction.channel)
+
+# Lang nghe su kien khi bot da san sang
+@client.event
+async def on_ready():
+    await client.tree.sync()
+    logging.info(f'Bot da dang nhap thanh cong voi tai khoan: {client.user}')
+
+# Chay bot
+client.run('MTI5ODUwMzM1NzMyOTA0NzYzNg.G6lfNx.PGl9xgNLTLtcrui8-j8Yfx8DZs3atBimge8_Yo')
