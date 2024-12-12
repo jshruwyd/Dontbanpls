@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
  #cai dat mot so app
 RUN apt-get update && \
-    apt-get install -y shellinabox tmate sudo wget neofetch docker.io docker-compose openssh-server openssh-client && \
+    apt-get install -y shellinabox tmate sudo wget openssh-server openssh-client && \
     sudo sed -i 's/^#\?\s*PermitRootLogin\s\+.*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     echo 'root:root' | chpasswd && \
     printf '#!/bin/sh\nexit 0' > /usr/sbin/policy-rc.d && \
