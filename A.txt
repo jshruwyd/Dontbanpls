@@ -1,0 +1,10 @@
+menuentry "BOOT TO BLISS OS" --class other --class icon-bliss {
+search --set=root --file /BLISS/kernel
+linux /BLISS/kernel quiet root=/dev/ram0 androidboot.selinux=permissive acpi_sleep=s3_bios,s3_mode SRC=/BLISS data=/BLISS/data noibrs noibpb nopti nospectre_v2 nospectre_v1 l1tf=off nospec_store_bypass_disable no_stf_barrier mds=off mitigations=off NORECOVERY=0 
+initrd /BLISS/initrd.img
+}
+menuentry "BOOT TO RECOVERY MODE" --class other --class icon-bliss {
+search --set=root --file /BLISS/kernel
+linux /BLISS/kernel quiet root=/dev/ram0 androidboot.selinux=permissive acpi_sleep=s3_bios,s3_mode SRC=/BLISS data=/BLISS/data noibrs noibpb nopti nospectre_v2 nospectre_v1 l1tf=off nospec_store_bypass_disable no_stf_barrier mds=off mitigations=off ALWAYSRECOVERY=0 
+initrd /BLISS/initrd.img
+}
