@@ -1,0 +1,21 @@
+services:
+  macos:
+    image: dockurr/macos
+    container_name: macos
+    environment:
+      RAM_SIZE: "40G"
+      CPU_CORES: "8"
+      VERSION: "15"
+    devices:
+      - /dev/kvm
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8006:8006
+      - 5900:5900/tcp
+      - 5900:5900/udp
+    volumes:
+      - ./home/user/Android/Sdk:/storage
+    restart: always
+    stop_grace_period: 2m
